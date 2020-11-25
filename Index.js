@@ -91,3 +91,4 @@ return inquirer.prompt([
     message: "What is the intern's school? ",
   }
 ]);
+

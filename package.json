@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@types/jest": "^26.0.15",
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "path": "^0.12.7"
   }
 }

@@ -1,14 +1,20 @@
 'use strict'
 
-
 const inquirer = require('inquirer');
-// const fs = require('fs');
+const fs = require('fs');
 const util = require('util');
-//const writeFileAsync = util.promisify(fs.writeFile);
 
-// array of questions for a manager
-const mgrQuestions = () => {},
-  return inquirer.prompt([
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const generatePage = require('./src/page-template.js');
+const writeFileAsync = util.promisify(fs.writeFile);
+
+const roster = [];
+
+// manager questions function
+function mgrQuestions() {
+  inquirer.prompt([
     {
       type: 'input',
       name: 'mgrName',
@@ -29,22 +35,46 @@ const mgrQuestions = () => {},
       name: 'officeNum',
       message: 'What is your office number? ',
     }
-  ]);
+  ])
+    .then((answers) => {
+      const manager = new Manager(
+        answers.name,
+        answers.id,
+        answers.email,
+        answers.officeNumber
+      );
+      roster.push(manager);
+      employeeQuestions();
+    })
+    .catch(error => console.log('Error!'));
+};
 
-// questions for building team
-const buildTeam = () => {},
-  return inquirer.prompt([
+// employee choice questions function
+function employeeQuestions() {
+  inquirer.prompt([
     {
-      type: 'choices',
-      name: 'memberChoice',
-      message: 'Would you like to add an engineer, add an intern, or finish building your team? ',
-      choices: ['Engineer', 'Intern', 'Build your Team'],
+      type: 'list',
+      name: 'employeeChoice',
+      message: 'Would you like to add an engineer, add an intern, or build your roster? ',
+      choices: ['Engineer', 'Intern', 'Build your Roster'],
     },
-  ]);
+  ])
+    .then((answers) => {
+      if (answers.employeeChoice === 'Engineer') {
+        engQuestions();
+      } else if
+        (answers.employeeChoice === 'Intern') {
+        internQuestions();
+      } else {
+        buildRoster();
+      }
+    })
+    .catch(error => console.log('Error!'));
+};    
 
-// array of questions about an engineer  
-const engQuestions = () => {},
-  return inquirer.prompt([
+// engineer questions function  
+function engQuestions() {
+  inquirer.prompt([
     {
       type: 'input',
       name: 'engName',
@@ -65,30 +95,51 @@ const engQuestions = () => {},
       name: 'engGitHubUsername',
       message: "What is the engineer's GitHub username? ",
     }
-  ]);
+  ])
+  .then((answers) => {
+    const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+    roster.push(engineer);
+    buildRoster();
+  })
+  .catch(error => console.log('Error!'));
+};
 
-// array of questions about an intern  
-const internQuestions = () => { },
-return inquirer.prompt([
-  {
-    type: 'input',
-    name: 'internName',
-    message: "What is the intern's name? ",
-  },
-  {
-    type: 'input',
-    name: 'internId',
-    message: "What is the intern's ID? ",
-  },
-  {
-    type: 'input',
-    name: 'internEmail',
-    message: "What is the intern's email address? ",
-  },
-  {
-    type: 'input',
-    name: 'internSchool',
-    message: "What is the intern's school? ",
-  }
-]);
+// intern questions function  
+function internQuestions() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'internName',
+      message: "What is the intern's name? ",
+    },
+    {
+      type: 'input',
+      name: 'internId',
+      message: "What is the intern's ID? ",
+    },
+    {
+      type: 'input',
+      name: 'internEmail',
+      message: "What is the intern's email address? ",
+    },
+    {
+      type: 'input',
+      name: 'internSchool',
+      message: "What is the intern's school? ",
+    }
+  ])
+  .then((answers) => {
+    const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
+    roster.push(intern);
+    buildRoster();
+  })
+  .catch(error => console.log('Error!'));
+};
 
+// function to build the team roster and print file
+function buildRoster() {
+  fs.writeFileSync('./dist/index.html', generatePage(roster));
+  console.log('Roster complete! Go to index.html to see the results!');
+};  
+
+mgrQuestions();

@@ -7,8 +7,7 @@ const util = require('util');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const generatePage = require('./write-page.js');
-const writeFileAsync = util.promisify(fs.writeFile);
+const writeMain = require('./write-page.js');
 
 const roster = [];
 
@@ -138,7 +137,7 @@ function internQuestions() {
 
 // function to build the team roster and print file
 function buildRoster() {
-  fs.writeFileSync('./dist/index.html', generatePage(roster));
+  fs.writeFileSync('./dist/index.html', writeMain(roster), 'utf-8');
   console.log('Roster complete! Go to index.html to see the results!');
 };  
 

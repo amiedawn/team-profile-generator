@@ -7,26 +7,86 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
-const templateFolder = 
+const templateFolder = './templates/'
 const team = '';
 
-// write sections per job
-// write manager
+// write sections per job start
 const writeManager = manager => {
-  const template = fs.readFileSync(path.resolve())
-}
+  let template = fs.readFileSync(path.resolve(templateFolder, 'manager-template.html'), 'utf8');
+  const managerHTML = '';
+  // name placeholder, g means replace all matching values
+  managerHTML = managerHTML + template.replace(/{{ name }}/g, manager.getName())
+    .replace(/{{ id }}/g, manager.getId())
+    .replace(/{{ email }}/g, manager.getEmail())
+    .replace(/{{ officeNumber }}/g, manager.getOfficeNumber())
+    .replace(/{{ role }}/g, manager.getRole());
+  team = team + managerHTML;
+  console.log(managerHTML);
+};
+
+const writeEngineer = engineer => {
+  let template = fs.readFileSync(path.resolve(templateFolder, 'engineer-template.html'), 'utf8');
+  const engineerHTML = '';
+  engineerHTML = engineerHTML + template.replace(/{{ name }}/g, engineer.getName())
+    .replace(/{{ id }}/g, engineer.getId())
+    .replace(/{{ email }}/g, engineer.getEmail())
+    .replace(/{{ github }}/g, engineer.getGithub())
+    .replace(/{{ role }}/g, engineer.getRole())
+  team = team + engineerHTML;
+  console.log(engineerHTML);
+};
+
+const writeIntern = intern => {
+  let template = fs.readFileSync(path.resolve(templateFolder, 'intern-template.html'), 'utf8');
+  const internHTML = '';
+  internHTML = internHTML + template.replace(/{{ name }}/g, intern.getName())
+    .replace(/{{ id }}/g, intern.getId())  
+    .replace(/{{ email }}/g, intern.getEmail())
+    .replace(/{{ school }}/g, intern.getSchool())
+    .replace(/{{ role }}/g, intern.getRole())
+  team = team + internHTML;
+  console.log(internHTML);
+};
+
+function writeMain() {
+  let mainTemplate = fs.readFileSync(path.resolve(templateFolder, "main.html"), "utf8");
+  const mainHTML = "";
+  mainHTML = mainHTML + mainTemplate.replace(/{{ team }}/g, team);
+  let fileName = path.join(__dirname, 'dist', '/index.html');
+  console.log(fileName);
+  fs.writeFile(fileName, mainHTML, function (err) {
+    if (err) {
+      throw new Error(err)
+    }
+    console.log('File created!');
+  });
+};
+
+// write sections per job end
+
+// create new constructor functions start
+function createManager(name, id, email, officeNumber) {
+  const manager = new Manager(name, id, email, officeNumber);
+  writeManager(manager);
+};
+
+function createEngineer(name, id, email, github) {
+  const engineer = new Engineer(name, id, email, github);
+  writeEngineer(engineer);
+};
+
+function createIntern(name, id, email, school) {
+  const intern = new Intern(name, id, email, school)
+  writeIntern(intern)
+};
+// create new constructor functions end
+
+module.exports = {
+  createManager: createManager,
+  createEngineer: createEngineer,
+  createIntern: createIntern,
+  writeMain: writeMain,
+};
 
 
-
-
-
-
-
-
-
-
-const generatePage = (name, github) => {
-
-
-module.exports = generatePage;
 

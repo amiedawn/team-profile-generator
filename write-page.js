@@ -51,7 +51,9 @@ const writeIntern = intern => {
 function writeMain() {
   let mainTemplate = fs.readFileSync(path.resolve(templateFolder, "main.html"), "utf8");
   const mainHTML = "";
+  console.log('before mainhtml');
   mainHTML = mainHTML + mainTemplate.replace(/{{ team }}/g, team);
+  console.log('after mainhtml');
   let fileName = path.join(__dirname, 'dist', '/index.html');
   console.log(fileName);
   fs.writeFile(fileName, mainHTML, function (err) {
@@ -61,6 +63,11 @@ function writeMain() {
     console.log('File created!');
   });
 };
+
+
+
+//possibly change path.join to this: path.resolve(templateFolder, 'intern-template.html'
+
 
 // write sections per job end
 
@@ -72,7 +79,9 @@ function createManager(name, id, email, officeNumber) {
 
 function createEngineer(name, id, email, github) {
   const engineer = new Engineer(name, id, email, github);
+  console.log('before writeengineer');
   writeEngineer(engineer);
+  console.log('after writeengineer');
 };
 
 function createIntern(name, id, email, school) {

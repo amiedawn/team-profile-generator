@@ -7,11 +7,11 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
-const templateFolder = './templates/'
+const templateFolder = './templates/';
 const team = '';
 
 // write sections per job start
-const writeManager = manager => {
+const renderManager = manager => {
   let template = fs.readFileSync(path.resolve(templateFolder, 'manager-template.html'), 'utf8');
   const managerHTML = '';
   // name placeholder, g means replace all matching values
@@ -24,7 +24,7 @@ const writeManager = manager => {
   console.log(managerHTML);
 };
 
-const writeEngineer = engineer => {
+const renderEngineer = engineer => {
   let template = fs.readFileSync(path.resolve(templateFolder, 'engineer-template.html'), 'utf8');
   const engineerHTML = '';
   engineerHTML = engineerHTML + template.replace(/{{ name }}/g, engineer.getName())
@@ -36,7 +36,7 @@ const writeEngineer = engineer => {
   console.log(engineerHTML);
 };
 
-const writeIntern = intern => {
+const renderIntern = intern => {
   let template = fs.readFileSync(path.resolve(templateFolder, 'intern-template.html'), 'utf8');
   const internHTML = '';
   internHTML = internHTML + template.replace(/{{ name }}/g, intern.getName())
@@ -48,8 +48,10 @@ const writeIntern = intern => {
   console.log(internHTML);
 };
 
-function writeMain() {
-  let mainTemplate = fs.readFileSync(path.resolve(templateFolder, "main.html"), "utf8");
+function renderMain() {
+
+  // generate HTML
+  let mainTemplate = fs.readFileSync('./templates/page-template.html', 'utf8');
   const mainHTML = "";
   console.log('before mainhtml');
   mainHTML = mainHTML + mainTemplate.replace(/{{ team }}/g, team);
@@ -74,19 +76,19 @@ function writeMain() {
 // create new constructor functions start
 function createManager(name, id, email, officeNumber) {
   const manager = new Manager(name, id, email, officeNumber);
-  writeManager(manager);
+  renderManager(manager);
 };
 
 function createEngineer(name, id, email, github) {
   const engineer = new Engineer(name, id, email, github);
-  console.log('before writeengineer');
-  writeEngineer(engineer);
-  console.log('after writeengineer');
+  console.log('before renderEngineer');
+  renderEngineer(engineer);
+  console.log('after renderEngineer');
 };
 
 function createIntern(name, id, email, school) {
   const intern = new Intern(name, id, email, school)
-  writeIntern(intern)
+  renderIntern(intern)
 };
 // create new constructor functions end
 
@@ -94,7 +96,7 @@ module.exports = {
   createManager: createManager,
   createEngineer: createEngineer,
   createIntern: createIntern,
-  writeMain: writeMain,
+  renderMain: renderMain,
 };
 
 

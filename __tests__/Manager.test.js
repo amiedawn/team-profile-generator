@@ -16,6 +16,14 @@ describe('Manager', () => {
   });
 
   // test function
+
+  //test if getOffice() returns an office number
+  test('return office number', () => {
+    const officeNumberValue = 34;
+    const mgrObj = new Manager('Amie', 14, 'sara@yahoo.com', officeNumberValue);
+    expect(mgrObj.getOfficeNumber()).toBe(officeNumberValue);
+  });  
+
   // test if getRole() gets overridden to return 'Manager'
   test('return Manager', () => {
     const roleValue = 'Manager';
@@ -23,3 +31,5 @@ describe('Manager', () => {
     expect(mgrObj.getRole()).toBe(roleValue);
   });
 });  
+
+

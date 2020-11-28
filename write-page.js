@@ -52,7 +52,7 @@ function renderMain() {
 
   // generate HTML
   let mainTemplate = fs.readFileSync('./templates/page-template.html', 'utf8');
-  const mainHTML = "";
+  let mainHTML = "";
   console.log('before mainhtml');
   mainHTML = mainHTML + mainTemplate.replace(/{{ team }}/g, team);
   console.log('after mainhtml');

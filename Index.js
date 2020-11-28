@@ -9,6 +9,7 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const writeMain = require('./write-page.js');
+//const { renderMain } = require('./write-page.js');
 
 //const generateHTML = writeMain.renderMain;
 // const generateManager = writeMain.createManager;
@@ -17,8 +18,7 @@ const writeMain = require('./write-page.js');
 
 let roster = [];
 let manager;
-const team = '';
-const templateFolder = './templates/';
+//const templateFolder = './templates/';
 
 
 // manager questions function
@@ -50,9 +50,10 @@ function mgrQuestions() {
         answers.mgrName,
         answers.mgrId,
         answers.mgrEmail,
-        answers.mgrOfficeNumber
+        answers.mgrOfficeNum
       );
       roster.push(manager);
+      console.log('roster', roster);
       console.log('pushed manager');
       empQuestions();
     })
@@ -68,6 +69,7 @@ function empQuestions() {
       message: 'Would you like to add an engineer or an intern? ',
       choices: ['Engineer', 'Intern'],
     },
+
     {
       type: 'input',
       name: 'empName',
@@ -94,46 +96,66 @@ function empQuestions() {
       type: 'input',
       name: 'internSchool',
       message: "What is the name of the employee's school? ",
-    },
-    {
-      type: 'confirm',
-      name: 'addEmployee',
-      message: 'Would you like to add another employee? ',
     }
   ])
     .then(answers => {
       // if new employee is an engineer, add a new engineer card
       if (answers.empChoice === 'Engineer') {
-        roster.push(new Engineer
-          (answers.name,
-            answers.id,
-            answers.email,
-            answers.github
-          )
-        )
-      // if new employee is an intern, add a new intern card
-      } else if (answers.empChoice === 'Intern') {
-        roster.push(new Intern
-          (answers.name,
-            answers.id,
-            answers.email,
-            answers.school
-          )
-        )
+        let employee = new Engineer(
+          answers.empName,
+          answers.empId,
+          answers.empEmail,
+          answers.engGitHubUsername
+        );
+        roster.push(employee);
+        console.log('roster', roster);
+        console.log('pushed emgineer');
+        addEmployee();
       }
-      
-      if (answers.addEmployee === true) {
-        console.log('true');
-        empQuestions();
-      // if they don't want to add another employee, render the roster
-      } else {
-        console.log('false');
-        //generateHTML;
-        renderMain();
+      // if new employee is an intern, add a new intern card
+      else if (answers.empChoice === 'Intern') {
+        let employee = new Intern(
+          answers.empName,
+          answers.empId,
+          answers.empEmail,
+          answers.internSchool
+        );
+        console.log(answers.name, answers.id, answers.email, answers.school);
+        roster.push(employee);
+        console.log('roster', roster);
+        console.log('pushed intern');
+        addEmployee();
       }
     })
-  //.catch(error => console.log('Error employee!'));
+    .catch(error => console.log('Error engineer or intern!'));
 };
+
+function addEmployee() {
+  inquirer.prompt({
+    type: 'confirm',
+    name: 'addEmployee',
+    message: 'Would you like to add another employee? ',
+  })
+  .then(answers => {
+    // if they want to add another employee, ask the questions again
+    if (answers.addEmployee === true) {
+      console.log('true');
+      empQuestions();
+
+      // if they don't want to add another employee, render the roster
+    } else {
+      console.log('false');
+      //generateHTML;
+      renderMain();
+    }
+  })
+  .catch(error => console.log('Error add employee!'));
+
+  
+};
+
+
+
 
 
 
@@ -147,8 +169,9 @@ const renderManager = manager => {
     .replace(/{{ email }}/g, manager.getEmail())
     .replace(/{{ officeNumber }}/g, manager.getOfficeNumber())
     .replace(/{{ role }}/g, manager.getRole());
-  team = team + managerHTML;
+  roster = roster + managerHTML;
   console.log(managerHTML);
+  console.log('roster', roster);
 };
 
 const renderEngineer = engineer => {
@@ -159,8 +182,9 @@ const renderEngineer = engineer => {
     .replace(/{{ email }}/g, engineer.getEmail())
     .replace(/{{ github }}/g, engineer.getGithub())
     .replace(/{{ role }}/g, engineer.getRole())
-  team = team + engineerHTML;
+  roster = roster + engineerHTML;
   console.log(engineerHTML);
+  console.log('roster', roster);
 };
 
 const renderIntern = intern => {
@@ -171,8 +195,32 @@ const renderIntern = intern => {
     .replace(/{{ email }}/g, intern.getEmail())
     .replace(/{{ school }}/g, intern.getSchool())
     .replace(/{{ role }}/g, intern.getRole())
-  team = team + internHTML;
+  roster = roster + internHTML;
   console.log(internHTML);
+  console.log('roster', roster);
+};
+
+function renderEmployee(employee) {
+  if (employee.getRole() === 'Intern') {
+    const internCard = fs.readFileSync('.templates/intern-template.html', 'UTF-8');
+    internCard = internCard.replace('{{name}}', employee.getName());
+    internCard = internCard.replace('{{role}}', employee.getRole());
+    internCard = internCard.replace('{{id}}', employee.getId());
+    internCard = internCard.replace('{{email}}', employee.getEmail());
+    internCard = internCard.replace('{{school}}', employee.getSchool());
+    console.log('roster', roster);
+    return internCard;
+
+  } else if (employee.getRole() === 'Engineer') {
+    const engCard = fs.readFileSync('./template/engineer-template.html', 'UTF-8');
+    engCard = engCard.replace('{{name}}', employee.getName());
+    engCard = engCard.replace('{{role}}', employee.getRole());
+    engCard = engCard.replace('{{id}}', employee.getId());
+    engCard = engCard.replace('{{email}}', employee.getEmail());
+    engCard = engCard.replace('{{github}}', employee.getGithub());
+    console.log('roster', roster);
+    return engCard;
+  }
 };
 
 function renderMain() {
@@ -180,7 +228,7 @@ function renderMain() {
   mainTemplate = mainTemplate.replace(/{{ roster }}/g, roster);
   // let mainHTML = "";
   // console.log('before mainhtml');
-  
+
   // console.log('after mainhtml');
 
   // loop through each employee and render each card, adding to the previous roster
@@ -191,14 +239,23 @@ function renderMain() {
   mgrCard = mgrCard.replace('{{email}}', manager.getEmail());
   mgrCard = mgrCard.replace('{{officeNumber}}', manager.getOfficeNumber());
 
+  // first card is always the mgrCard
+  const empCards = mgrCard;
+  for (let i = 0; i < roster.length; i++) {
+    let employee = roster[i];
+    empCards = empCards + renderEmployee(employee);
+  }
 
-  fs.writeFileSync('./dist/index.html', mainHTML, function (err) {
+  // add any additional cards for other employees
+  mainTemplate = mainTemplate.replace('{{empCards}}', empCards);
+
+  fs.writeFileSync('./dist/index.html', mainTemplate, function (err) {
     if (err) {
       console.log(err);
     } else {
       console.log('File created!');
     };
-  })  
+  })
 };
 
 // write sections per job end
@@ -223,3 +280,5 @@ function createIntern(name, id, email, school) {
 // create new constructor functions end
 
 mgrQuestions();
+
+

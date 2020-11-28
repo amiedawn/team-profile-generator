@@ -16,6 +16,8 @@ const generateHTML = writeMain.renderMain;
 // const generateIntern = writeMain.createIntern;
 
 let roster = [];
+const templateFolder = './templates/';
+
 
 // manager questions function
 function mgrQuestions() {
@@ -123,91 +125,23 @@ function empQuestions() {
         //generateHTML;
         renderMain();
       }
-    })  
-    //.catch(error => console.log('Error employee!'));
+    })
+  //.catch(error => console.log('Error employee!'));
 };
 
 function renderMain() {
   let mainTemplate = fs.readFileSync('./templates/page-template.html', 'utf8');
-  const mainHTML = "";
+  let mainHTML = "";
   console.log('before mainhtml');
-  mainHTML = mainHTML + mainTemplate.replace(/{{ team }}/g, team);
+  mainHTML = mainHTML + mainTemplate.replace(/{{ roster }}/g, roster);
   console.log('after mainhtml');
-  let fileName = path.join(__dirname, 'dist', '/index.html');
-  console.log(fileName);
-  fs.writeFile(fileName, mainHTML, function (err) {
+  fs.writeFileSync('./dist/index.html', mainHTML, function (err) {
     if (err) {
-      throw new Error(err)
-    }
-    console.log('File created!');
-  });
+      console.log(err);
+    } else {
+      console.log('File created!');
+    };
+  })  
 };
-// engineer questions function  
-// function engQuestions() {
-//   inquirer.prompt([
-//     {
-//       type: 'input',
-//       name: 'engName',
-//       message: "What is the engineer's name? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'engId',
-//       message: "What is the engineer's ID? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'engEmail',
-//       message: "What is the engineer's email address? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'engGitHubUsername',
-//       message: "What is the engineer's GitHub username? ",
-//       when: (userInput) => userInput.empChoice === 'Engineer',
-//     }
-//   ])
-//     .then((answers) => {
-//       writeMain;
-//     })
-//     .catch(error => console.log('Error engineer!'));
-// };
-
-// // intern questions function  
-// function internQuestions() {
-//   inquirer.prompt([
-//     {
-//       type: 'input',
-//       name: 'internName',
-//       message: "What is the intern's name? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'internId',
-//       message: "What is the intern's ID? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'internEmail',
-//       message: "What is the intern's email address? ",
-//     },
-//     {
-//       type: 'input',
-//       name: 'internSchool',
-//       message: "What is the name of the intern's school? ",
-//       when: (userInput) => userInput.empChoice === 'Intern',
-//     }
-//   ])
-//     .then((answers) => {
-//       writeMain;
-//     })
-//     .catch(error => console.log('Error intern!'));
-// };
-
-// function to build the team roster and print file
-// function buildRoster() {
-//   fs.writeFileSync('./dist/index.html', writeMain(roster), 'utf-8');
-//   console.log('Roster complete! Go to index.html to see the results!');
-// };
 
 mgrQuestions();

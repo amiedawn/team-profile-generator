@@ -111,5 +111,5 @@ function addEmployee() {
       throw err
     })
   };
-
-    askQuestions();
+  
+askQuestions();

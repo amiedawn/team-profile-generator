@@ -13,7 +13,6 @@ let roster = "";
 // functions to create new Constructors START
 function createManager(name, id, email, officeNumber) {
   const manager = new Manager(name, id, email, officeNumber);
-  console.log(1);
   renderManager(manager);
 };
 
@@ -38,8 +37,6 @@ const renderManager = manager => {
     .replace(/{{ id }}/g, manager.getId())
     .replace(/{{ officeNumber }}/g, manager.getOfficeNumber())
   roster = roster + mgrCard;
-  console.log(2);
-  console.log(mgrCard);
 };
 
 const renderEngineer = engineer => {
@@ -51,7 +48,6 @@ const renderEngineer = engineer => {
     .replace(/{{ id }}/g, engineer.getId())
     .replace(/{{ github }}/g, engineer.getGitHub())
   roster = roster + engCard;
-  console.log(engCard);
 };
 
 const renderIntern = intern => {
@@ -63,7 +59,6 @@ const renderIntern = intern => {
     .replace(/{{ id }}/g, intern.getId())
     .replace(/{{ school }}/g, intern.getSchool())
   roster = roster + internCard;
-  console.log(internCard);
 };
 // functions to render html for each role END
 

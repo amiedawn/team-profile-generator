@@ -12,6 +12,7 @@
   - [License:](#license)
   - [Contribution Guidelines:](#contribution-guidelines)
   - [Tests:](#tests)
+  - [Video Demonstration:](#video-demonstration)
   - [Credits:](#credits)
   - [Questions?](#questions)
 
@@ -39,11 +40,15 @@ If you would like to contribute to this project, please contact the author via G
 
 ## Tests:
 
-Unit tests were designed for each employee type: Employee, Manager, Engineer, and Intern. You may run these tests by installing Jest and running the command "npm run test".
+Unit tests were designed for each employee type: Employee, Manager, Engineer, and Intern. You can see the tests for the Employee here: ![Screenshot](./dist/assets/images/test-screenshot.png) .<br><br>Here, you will see that all 4 tests pass: ![Screenshot](./dist/assets/images/test-pass-screenshot.png) .<br><br>You may run these tests yourself by installing Jest and running the command "npm run test".<br><br>
+
+## Video Demonstration:
+
+View a walkthrough of the application here: https://drive.google.com/file/d/19DOXEc9XIsX4tFDInPcFWoW7yA2Wzkbp/view
 
 ## Credits:
 
-Thank you to several GitHub users for their examples which helped in the design of this application: AlexTagg392, cml2377, and annasuvvac. Also, thank you to my instructor Jason Whitted for providing several helpful videos to assist in this project.
+Thank you to several GitHub users for their examples which helped in the design of this application: AlexTagg392, cml2377, and annasuvvac. Also, thank you to my instructor Jason for providing several helpful videos to assist in this project.
 
 ## Questions?
 

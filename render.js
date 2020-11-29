@@ -10,7 +10,25 @@ const Intern = require("./lib/intern");
 
 let roster = "";
 
-// functions to render html for each role start
+// functions to create new Constructors START
+function createManager(name, id, email, officeNumber) {
+  const manager = new Manager(name, id, email, officeNumber);
+  console.log(1);
+  renderManager(manager);
+};
+
+function createEngineer(name, id, email, github) {
+  const engineer = new Engineer(name, id, email, github);
+  renderEngineer(engineer);
+};
+
+function createIntern(name, id, email, school) {
+  const intern = new Intern(name, id, email, school);
+  renderIntern(intern);
+};
+// functions to create new Constructors END
+
+// functions to render html for each role START
 const renderManager = manager => {
   let template = fs.readFileSync("./templates/manager-template.html", "UTF-8");
   let mgrCard = "";
@@ -20,6 +38,7 @@ const renderManager = manager => {
     .replace(/{{ id }}/g, manager.getId())
     .replace(/{{ officeNumber }}/g, manager.getOfficeNumber())
   roster = roster + mgrCard;
+  console.log(2);
   console.log(mgrCard);
 };
 
@@ -46,26 +65,9 @@ const renderIntern = intern => {
   roster = roster + internCard;
   console.log(internCard);
 };
-// functions to render html for each role end
+// functions to render html for each role END
 
-// functions to create new Constructors start
-function createManager(name, id, email, officeNumber) {
-  const manager = new Manager(name, id, email, officeNumber);
-  renderManager(manager);
-};
-
-function createEngineer(name, id, email, github) {
-  const engineer = new Engineer(name, id, email, github);
-  renderEngineer(engineer);
-};
-
-function createIntern(name, id, email, school) {
-  const intern = new Intern(name, id, email, school);
-  renderIntern(intern);
-};
-// functions to create new Constructors end
-
-// function to generate the roster
+// function to generate the mainTemplate of the roster
 function renderMain() {
   let mainTemplate = fs.readFileSync("./templates/page-template.html", "UTF-8");
   let mainHTML = "";
